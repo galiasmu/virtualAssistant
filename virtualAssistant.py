@@ -7,6 +7,10 @@ import webbrowser
 import datetime
 import wikipedia
 
+# Estos son los ids de los idioma de voz instalados en la computadora
+idSpanish = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_ES-MX_SABINA_11.0'
+idEnglish = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0'
+
 # escuchar microfono para devolver el audio como texto
 def transform_audio_to_text():
 
@@ -66,20 +70,71 @@ def speak(message):
 
     # encender motor de pyttsx3
     engine = pyttsx3.init()
-    engine.setProperty('voice', idEnglish)
+    engine.setProperty('voice', idSpanish)
 
     # dira el mensaje
     engine.say(message)
     # corre nuevamente y escucha el proximo mensaje
     engine.runAndWait()
 
+# consultar dias de la semana
+def consultar_day():
+
+    # crear variable con datos de hoy
+
+    dia = datetime.date.today()
+    print(dia)
+
+    #crear variable para aislar dia de semana
+    day_week = dia.weekday()
+    print(day_week)
+
+    #diccionario que contiene nombres de dias
+    calendario = {0:'Lunes',
+                  1:'Martes',
+                  2:'Miércoles',
+                  3:'Jueves',
+                  4:'Viernes',
+                  5:'Sabado',
+                  6:'Domingo'}
+    # el lenguaje interpreta lo anterior
+    speak(f'Hoy es {calendario[day_week]}, el día de los enamorados, y a la hija de alguien se la van a empomar')
+
+
+# informar que hora es
+def consultar_hora():
+
+    # hacemos lo mismo que con fecha
+    hora = datetime.datetime.now()
+    hora = f'En este momento son las {hora.hour} horas con {hora.minute} minutos y {hora.second} segundos, GALI'
+    print(hora)
+
+    # decir la hora correctamente
+    speak(hora)
+
+def hello_world():
+
+    #crear variable con datos de hora
+
+    hora = datetime.datetime.now()
+    if hora.hour < 6 or hora.hour > 20:
+        momento = 'Buenas noches'
+    elif 6 <= hora.hour < 13:
+        momento = 'Buen día'
+    else:
+        momento = 'Buenas Tardes'
+
+    speak(f'{momento} Gali, soy el GaliAssistant, tu asistente personal, mucho mejor que la mierda de siri o Alexa. Dime, en que te puedo ayudar?')
+
 # engine = pyttsx3.init()
 # for voz in engine.getProperty('voices'):
 #     print(voz)
 
 
-# estos son los ids de los idioma de voz instalados en la computadora
-idSpanish = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_ES-MX_SABINA_11.0'
-idEnglish = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0'
 
-speak('hi, my name is galiAsisstant. i am programming for more thinks')
+
+# speak('hi, my name is galiAsisstant. i am programming for more thinks')
+
+# consultar_day()
+hello_world()
+consultar_hora()
