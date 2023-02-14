@@ -72,3 +72,6 @@ def speak(message):
     # corre nuevamente y escucha el proximo mensaje
     engine.runAndWait()
 
+engine = pyttsx3.init()
+for voz in engine.getProperty('voices'):
+    print(voz)
