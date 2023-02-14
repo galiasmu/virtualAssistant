@@ -42,7 +42,7 @@ def transform_audio_to_text():
 
         except sr.UnknownValueError:
             # prueba de que no comprendio el audio
-            print("Ups, no entendi")
+            speak('úps, no entendi, podrias volver a repetir la frase')
             print("error code: 002xfa")
 
             # devolver error
@@ -85,11 +85,11 @@ def consultar_day():
     dia = datetime.date.today()
     print(dia)
 
-    #crear variable para aislar dia de semana
+    # crear variable para aislar dia de semana
     day_week = dia.weekday()
     print(day_week)
 
-    #diccionario que contiene nombres de dias
+    # diccionario que contiene nombres de dias
     calendario = {0:'Lunes',
                   1:'Martes',
                   2:'Miércoles',
@@ -98,7 +98,7 @@ def consultar_day():
                   5:'Sabado',
                   6:'Domingo'}
     # el lenguaje interpreta lo anterior
-    speak(f'Hoy es {calendario[day_week]}, el día de los enamorados, y a la hija de alguien se la van a empomar')
+    speak(f'Hoy es {calendario[day_week]}')
 
 
 # informar que hora es
@@ -126,6 +126,37 @@ def hello_world():
 
     speak(f'{momento} Gali, soy el GaliAssistant, tu asistente personal, mucho mejor que la mierda de siri o Alexa. Dime, en que te puedo ayudar?')
 
+def init():
+
+    # activar saludo inicial
+    hello_world()
+
+    # variable de corte
+    inicio = True
+
+    # loop central
+    while inicio:
+
+        #activar el micro y guardar el pedido en un string
+        pedido = transform_audio_to_text().lower() # lower(convierte en minuscula el texto extraido)
+
+        if 'abrir youtube' in pedido:
+            speak('Con gusto, estoy abriendo Youtube')
+            webbrowser.open('https://www.youtube.com/')
+            continue
+        elif 'abrir navegador' in pedido:
+            speak('Como no, estoy en eso')
+            webbrowser.open('https://www.google.com')
+            continue
+        elif 'qué día es hoy' in pedido:
+            consultar_day()
+            continue
+        elif 'qué hora es' in pedido:
+            speak(consultar_hora())
+            continue
+
+
+
 # engine = pyttsx3.init()
 # for voz in engine.getProperty('voices'):
 #     print(voz)
@@ -136,5 +167,7 @@ def hello_world():
 # speak('hi, my name is galiAsisstant. i am programming for more thinks')
 
 # consultar_day()
-hello_world()
-consultar_hora()
+#hello_world()
+#consultar_hora()
+
+init()
