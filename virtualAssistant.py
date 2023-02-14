@@ -66,12 +66,20 @@ def speak(message):
 
     # encender motor de pyttsx3
     engine = pyttsx3.init()
+    engine.setProperty('voice', idEnglish)
 
     # dira el mensaje
     engine.say(message)
     # corre nuevamente y escucha el proximo mensaje
     engine.runAndWait()
 
-engine = pyttsx3.init()
-for voz in engine.getProperty('voices'):
-    print(voz)
+# engine = pyttsx3.init()
+# for voz in engine.getProperty('voices'):
+#     print(voz)
+
+
+# estos son los ids de los idioma de voz instalados en la computadora
+idSpanish = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_ES-MX_SABINA_11.0'
+idEnglish = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0'
+
+speak('hi, my name is galiAsisstant. i am programming for more thinks')
