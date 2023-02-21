@@ -243,7 +243,7 @@ def init():
 #get_applications()
 open_app("Brave")
 
-# init()
+ init()
 
 
 # engine = pyttsx3.init()
