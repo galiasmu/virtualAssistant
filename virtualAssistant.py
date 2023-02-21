@@ -9,6 +9,23 @@ import wikipedia
 from pynput import keyboard as kb
 import os
 import subprocess
+import tkinter as tk
+import ctypes
+import sys
+import winreg
+
+
+
+
+
+root = tk.Tk()
+
+label = tk.Label(root, text="Bienvendio al asistente por voz!")
+label.pack
+button = tk.Button(root, text="Hacer una pregunta")
+button.pack()
+
+# root.mainloop()
 
 # Estos son los ids de los idioma de voz instalados en la computadora
 idSpanish = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_ES-MX_SABINA_11.0'
@@ -130,14 +147,24 @@ def hello_world():
         f'{momento} Gali, soy tu asistente personal. Dime, en que te puedo ayudar?')
 
 
+
+def get_applications():
+    root_dirs = ["C:\\Program Files (x86)", "C:\\Program Files", "C:\\"]
+    applications = []
+    for root_dir in root_dirs:
+        for root, dirs, files in os.walk(root_dir):
+            for file in files:
+                if file.endswith('.exe'):
+                    filepath = os.path.join(root, file)
+                    applications.append(filepath)
+    return applications
+
 def open_app(app_name):
-    try:
-        subprocess.run([app_name + '.exe'])
-        speak(f"Abriendo {app_name}")
-    except:
-        speak(f"No se pudo abrir {app_name}. ¿Está instalado en tu computadora?")
-
-
+    for app in get_applications():
+        if app_name.lower() in app.lower():
+            subprocess.call(app)
+            return True
+    return False
 
 def init():
     # activar saludo inicial
@@ -160,9 +187,10 @@ def init():
             speak('Como no, estoy en eso')
             webbrowser.open('https://www.google.com')
             continue
-        if 'abrir ' in pedido:
-            app_name = pedido.replace('abrir', '').strip()
-            open_app(app_name)
+        if 'abrir' in pedido:
+            app_name = pedido.replace('Abrir', '').strip()
+            if not open_app(app_name):
+                speak(f"No se pudo abrir {app_name}. ¿Está instalado en tu computadora?")
             continue
         elif 'qué día es hoy' in pedido:
             consultar_day()
@@ -206,14 +234,16 @@ def init():
                 speak("Perdón pero no la he encontrado")
                 continue
 
-        elif 'Chau'  in pedido:
+        elif 'Chau' in pedido:
             speak('Me voy a descansar, cualquier cosa me avisas')
         break
 
 
 
-init()
+#get_applications()
+open_app("Brave")
 
+# init()
 
 
 # engine = pyttsx3.init()
@@ -226,6 +256,3 @@ init()
 # consultar_day()
 # hello_world()
 # consultar_hora()
-#openApp()
-
-#open_app('calc.exe')
