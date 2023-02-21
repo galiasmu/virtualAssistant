@@ -10,6 +10,7 @@ from pynput import keyboard as kb
 import os
 import subprocess
 import tkinter as tk
+import pickle
 import ctypes
 import sys
 import winreg
@@ -148,23 +149,37 @@ def hello_world():
 
 
 
-def get_applications():
-    root_dirs = ["C:\\Program Files (x86)", "C:\\Program Files", "C:\\"]
-    applications = []
-    for root_dir in root_dirs:
-        for root, dirs, files in os.walk(root_dir):
-            for file in files:
-                if file.endswith('.exe'):
-                    filepath = os.path.join(root, file)
-                    applications.append(filepath)
-    return applications
+
+def create_index():
+    index = []
+    for root in ["C:\\Program Files (x86)", "C:\\Program Files", "C:\\"]:
+        for dirpath, _, filenames in os.walk(root):
+            for filename in filenames:
+                if filename.endswith(".exe"):
+                    filepath = os.path.join(dirpath, filename)
+                    index.append(filepath)
+    with open("index.pickle", "wb") as f:
+        pickle.dump(index, f)
+
+def load_index():
+    with open("index.pickle", "rb") as f:
+        return pickle.load(f)
 
 def open_app(app_name):
-    for app in get_applications():
+    try:
+        with open("index.pickle", "rb") as f:
+            index = pickle.load(f)
+    except FileNotFoundError:
+        create_index()
+        with open("index.pickle", "rb") as f:
+            index = pickle.load(f)
+
+    for app in index:
         if app_name.lower() in app.lower():
-            subprocess.call(app)
+            subprocess.Popen(app)
             return True
     return False
+
 
 def init():
     # activar saludo inicial
@@ -241,9 +256,9 @@ def init():
 
 
 #get_applications()
-open_app("Brave")
+open_app("notepad")
 
- init()
+ #init()
 
 
 # engine = pyttsx3.init()
