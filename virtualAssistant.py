@@ -149,21 +149,30 @@ def hello_world():
 
 
 def get_applications():
-    root_dirs = ["C:\\Program Files (x86)", "C:\\Program Files", "C:\\"]
+    application_dirs = ["C:\\Program Files (x86)", "C:\\Program Files", "C:\\"]
     applications = []
-    for root_dir in root_dirs:
-        for root, dirs, files in os.walk(root_dir):
+    for app_dir in application_dirs:
+        for root, dirs, files in os.walk(app_dir):
             for file in files:
                 if file.endswith('.exe'):
                     filepath = os.path.join(root, file)
                     applications.append(filepath)
     return applications
 
+specific_apps = {
+    "chrome": "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe",
+    "steam": "C:\\Program Files (x86)\\Steam\\steam.exe"
+}
+
 def open_app(app_name):
-    for app in get_applications():
-        if app_name.lower() in app.lower():
-            subprocess.call(app)
-            return True
+    if app_name.lower() in specific_apps:
+        subprocess.call(specific_apps[app_name.lower()])
+        return True
+    else:
+        for app in get_applications():
+            if app_name.lower() in app.lower():
+                subprocess.call(app)
+                return True
     return False
 
 def init():
@@ -241,9 +250,8 @@ def init():
 
 
 #get_applications()
-open_app("Brave")
-
- init()
+open_app("steam")
+init()
 
 
 # engine = pyttsx3.init()
