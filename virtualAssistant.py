@@ -164,16 +164,18 @@ specific_apps = {
     "steam": "C:\\Program Files (x86)\\Steam\\steam.exe"
 }
 
+
 def open_app(app_name):
     if app_name.lower() in specific_apps:
-        subprocess.call(specific_apps[app_name.lower()])
+        os.startfile(specific_apps[app_name.lower()])
         return True
     else:
         for app in get_applications():
             if app_name.lower() in app.lower():
-                subprocess.call(app)
+                os.startfile(app)
                 return True
     return False
+
 
 def init():
     # activar saludo inicial
@@ -201,8 +203,7 @@ def init():
                 app_name = pedido.split("abrir")[-1].strip()
                 speak(f"La aplicación {app_name} se esta abriendo.")
                 if open_app(app_name):
-                    speak(f"La aplicación {app_name} se esta abriendo.")
-
+                    print("se esta abriendo la aplicacion")
                 else:
                     speak(f"No se pudo encontrar la aplicación {app_name}.")
                     continue
