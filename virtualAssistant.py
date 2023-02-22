@@ -196,10 +196,16 @@ def init():
             speak('Como no, estoy en eso')
             webbrowser.open('https://www.google.com')
             continue
-        if 'abrir' in pedido:
-            app_name = pedido.replace('Abrir', '').strip()
-            if not open_app(app_name):
-                speak(f"No se pudo abrir {app_name}. ¿Está instalado en tu computadora?")
+        elif 'abrir' in pedido:
+            if "abrir" in pedido:
+                app_name = pedido.split("abrir")[-1].strip()
+                speak(f"La aplicación {app_name} se esta abriendo.")
+                if open_app(app_name):
+                    print(f"La aplicación {app_name} ha sido abierta.")
+
+                else:
+                    speak(f"No se pudo encontrar la aplicación {app_name}.")
+                    continue
             continue
         elif 'qué día es hoy' in pedido:
             consultar_day()
@@ -250,7 +256,7 @@ def init():
 
 
 #get_applications()
-open_app("steam")
+#open_app("steam")
 init()
 
 
