@@ -201,7 +201,7 @@ def init():
                 app_name = pedido.split("abrir")[-1].strip()
                 speak(f"La aplicación {app_name} se esta abriendo.")
                 if open_app(app_name):
-                    print(f"La aplicación {app_name} ha sido abierta.")
+                    speak(f"La aplicación {app_name} se esta abriendo.")
 
                 else:
                     speak(f"No se pudo encontrar la aplicación {app_name}.")
