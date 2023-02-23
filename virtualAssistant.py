@@ -65,8 +65,9 @@ def transform_audio_to_text():
             speak('úps, no entendi, podrias volver a repetir la frase')
             print("error code: 002xfa")
 
-            # devolver error
-            return "sigo esperando"
+            # volver a llamar a la función
+            return transform_audio_to_text()
+
 
         # en caso de no poder resolver el pedido
         # except sr.RequestError:
@@ -258,7 +259,7 @@ def init():
 
 #get_applications()
 #open_app("steam")
-init()
+#init()
 
 
 # engine = pyttsx3.init()
