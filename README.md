@@ -9,4 +9,4 @@ pip install  pywhatkit
 pip install  yfinance
 pip install  pyjokes
 ```
-El programa se recomienda realizar en IDE [Pycharm](https://www.jetbrains.com/pycharm/)
+It is recommended to work with the pycharm IDE [Pycharm](https://www.jetbrains.com/pycharm/)
