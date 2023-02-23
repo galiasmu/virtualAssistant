@@ -57,19 +57,24 @@ def transform_audio_to_text():
 
 
         # en caso de no poder resolver el pedido
-        # except sr.RequestError:
-        #     # prueba de que no comprendio el audio
-        #     print("Ups, no se pudo resolver la tarea realizada o no entendi")
-        #     print("error code: 007adx")
-        #
-        #     # devolver error
-        #     return "sigo esperando"
-        #
-        # # error inesperado
-        # except:
-        #     print("ups, algo a salido mal, desesas mandar un informe?")
-        #
-        #     return "code error 00xx2"
+        except sr.RequestError:
+
+            # prueba de que no comprendio el audio
+            print("ups, no hay servicio")
+
+            # devolver error
+            return "sigo esperando"
+            return transform_audio_to_text()
+
+            # error inesperado
+        except:
+
+            # prueba de que no comprendio el audio
+            print("ups, algo ha salido mal")
+
+            # devolver error
+            return "sigo esperando"
+            return transform_audio_to_text()
 
 
 # transform_audio_to_text()
@@ -165,6 +170,25 @@ def open_app(app_name):
     return False
 
 
+def buscar_wikipedia(pedido):
+    wikipedia.set_lang('es')  # Establecer lenguaje a español
+    busqueda = pedido.replace('busca en wikipedia', '')
+    try:
+        pagina = wikipedia.page(busqueda)
+        resumen = pagina.summary
+        speak(f"Resumen de '{busqueda}': {resumen}")
+        abrir_pagina = input("¿Quieres que abra la página en tu navegador? ").lower()
+        if abrir_pagina == 'sí' in pedido:
+            url = pagina.url
+            webbrowser.open(url)
+        return resumen
+    except wikipedia.exceptions.PageError:
+        speak(f"No se encontró una página para '{busqueda}' en Wikipedia.")
+        return "Lo siento, no se encontró información en Wikipedia sobre lo que has pedido."
+
+
+
+
 def init():
     # activar saludo inicial
     hello_world()
@@ -212,13 +236,8 @@ def init():
         elif 'qué hora es' in pedido:
             speak(consultar_hora())
             continue
-        elif 'busca en wikipedia' in pedido:
-            speak('Buscando la informacion solicitada')
-            pedido = pedido.replace('busca en wikipedia', '')
-            wikipedia.set_lang('es')  # establecer lenguaje
-            rta = wikipedia.summary(pedido, sentences=1)
-            speak('Wikipedia dice lo siguiente: ')
-            speak(rta)
+        elif 'Busca en Wikipedia' or 'Buscar en Wikipedia' in pedido:
+            buscar_wikipedia(pedido)
             continue
         elif 'busca en internet ' in pedido:
             speak('Ya mismo estoy en eso')
