@@ -9,23 +9,10 @@ import wikipedia
 from pynput import keyboard as kb
 import os
 import subprocess
-import tkinter as tk
 import ctypes
 import sys
 import winreg
 
-
-
-
-
-root = tk.Tk()
-
-label = tk.Label(root, text="Bienvendio al asistente por voz!")
-label.pack
-button = tk.Button(root, text="Hacer una pregunta")
-button.pack()
-
-# root.mainloop()
 
 # Estos son los ids de los idioma de voz instalados en la computadora
 idSpanish = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_ES-MX_SABINA_11.0'
@@ -203,11 +190,21 @@ def init():
             if "abrir" in pedido:
                 app_name = pedido.split("abrir")[-1].strip()
                 speak(f"La aplicación {app_name} se esta abriendo.")
+                continue
                 if open_app(app_name):
                     print("se esta abriendo la aplicacion")
                 else:
                     speak(f"No se pudo encontrar la aplicación {app_name}.")
                     continue
+            continue
+        elif 'Qué puedes hacer' in pedido:
+            speak("puedo realizar muchahs tareas para la cual fui programada.")
+            speak("Puedo decirte la fecha y hora del dia de hoy, "
+                  "puedo abrir aplicaciones, "
+                  "reproducirte musica en youtube (no, no me paga Google para esto), "
+                  "puedo realizar busquedas en wikipedia o en el navegador, "
+                  "tambien puedo decirte un par de chistes"
+                  "Con el tiempo tendre muchas mas funcionalidades")
             continue
         elif 'qué día es hoy' in pedido:
             consultar_day()
@@ -259,7 +256,7 @@ def init():
 
 #get_applications()
 #open_app("steam")
-#init()
+init()
 
 
 # engine = pyttsx3.init()
