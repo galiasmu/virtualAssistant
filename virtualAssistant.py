@@ -44,6 +44,7 @@ def transform_audio_to_text():
 
             # devolver pedido
             return pedido
+            #return transform_audio_to_text()
 
         # en caso de que no comprenda el audio
 
@@ -154,16 +155,17 @@ def get_applications():
 
 specific_apps = {
     "chrome": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
-    "steam": "C:\\Program Files (x86)\\Steam\\steam.exe"
+    "steam": "C:\\Program Files (x86)\\Steam\\steam.exe",
+    "epic games": "C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\EpicGamesLauncher.exe"
 }
 
 
 def open_app(app_name):
-    if app_name.lower() in specific_apps:
-        os.startfile(specific_apps[app_name.lower()])
+    if app_name.lower() in specific_apps: # busca en variable global de apps especificas
+        os.startfile(specific_apps[app_name.lower()]) # si esta ahi, que la abra
         return True
     else:
-        for app in get_applications():
+        for app in get_applications(): #sino lo buscara de la funcion obetener aplicaciones
             if app_name.lower() in app.lower():
                 os.startfile(app)
                 return True
@@ -188,6 +190,7 @@ def init():
         # activar el micro y guardar el pedido en un string
         pedido = transform_audio_to_text().lower()  # lower(convierte en minuscula el texto extraido)
 
+
         if 'abrir youtube' in pedido:
             speak('Con gusto, estoy abriendo Youtube')
             webbrowser.open('https://www.youtube.com/')
@@ -197,23 +200,22 @@ def init():
             webbrowser.open('https://www.google.com')
             continue
         elif 'abrir' in pedido:
-            if "abrir" in pedido:
                 app_name = pedido.split("abrir")[-1].strip()
                 speak(f"La aplicación {app_name} se esta abriendo.")
                 if open_app(app_name):
                     print("se esta abriendo la aplicacion")
                 else:
                     speak(f"No se pudo encontrar la aplicación {app_name}.")
-                    continue
-            continue
-        elif 'Qué puedes hacer' in pedido:
-            speak("puedo realizar muchahs tareas para la cual fui programada.")
-            speak("Puedo decirte la fecha y hora del dia de hoy, "
+
+                continue
+        elif 'qué sabes hacer' in pedido:
+            pedido = speak("puedo realizar muchahs tareas para la cual fui programada.")
+            speak("Puedo decirte la fecha y hora del día de hoy, "
                   "puedo abrir aplicaciones, "
                   "reproducirte musica en youtube (no, no me paga Google para esto), "
                   "puedo realizar busquedas en wikipedia o en el navegador, "
-                  "tambien puedo decirte un par de chistes"
-                  "Con el tiempo tendre muchas mas funcionalidades")
+                  "tambien puedo decirte un par de chistes,"
+                  " y Con el tiempo tendre muchas mas funcionalidades")
             continue
         elif 'qué día es hoy' in pedido:
             consultar_day()
@@ -223,9 +225,9 @@ def init():
             continue
         elif 'busca en wikipedia' in pedido:
             speak(f'Buscando en wikipedia')
-            pedido = pedido.replace('busca en wikipedia', '')
-            wikipedia.set_lang('es')
-            rta = wikipedia.summary(pedido, sentences=2)
+            pedido = pedido.replace('busca en wikipedia', '') # para que no busque con la frase "buscar en wikipedia" sino que la omite
+            wikipedia.set_lang('es') # define el idioma para buscar en wikipedia
+            rta = wikipedia.summary(pedido, sentences=2) # obtiene un resumen de lo buscado de 2 parrafos.
             speak('Wikipedia dice lo siguiente:')
             speak(rta)
             continue
@@ -244,9 +246,9 @@ def init():
             continue
         elif 'precio de las acciones' in pedido:
             accion = pedido.split('de')[-1].strip()
-            cartera = {'apple': 'APPL',
-                       'amazon': 'AMZN',
-                       'google': 'GOOGL'}
+            cartera = {'Apple': 'APPL',
+                       'Amazon': 'AMZN',
+                       'Google': 'GOOGL'}
             try:
                 accion_buscada = cartera[accion]
                 accion_buscada = yf.Ticker(accion_buscada)
@@ -256,7 +258,9 @@ def init():
             except:
                 speak("Perdón pero no la he encontrado")
                 continue
-
+        elif '' in pedido:
+            pedido = speak("No entendi, podes volver a hablar por favor?")
+            continue
         elif 'Chau' or 'ya no te necesito' in pedido:
             speak('Me voy a descansar, cualquier cosa me avisas')
         break
