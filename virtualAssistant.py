@@ -153,7 +153,7 @@ def get_applications():
     return applications
 
 specific_apps = {
-    "chrome": "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe",
+    "chrome": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
     "steam": "C:\\Program Files (x86)\\Steam\\steam.exe"
 }
 
@@ -170,21 +170,7 @@ def open_app(app_name):
     return False
 
 
-def buscar_wikipedia(pedido):
-    wikipedia.set_lang('es')  # Establecer lenguaje a español
-    busqueda = pedido.replace('busca en wikipedia', '')
-    try:
-        pagina = wikipedia.page(busqueda)
-        resumen = pagina.summary
-        speak(f"Resumen de '{busqueda}': {resumen}")
-        abrir_pagina = input("¿Quieres que abra la página en tu navegador? ").lower()
-        if abrir_pagina == 'sí' in pedido:
-            url = pagina.url
-            webbrowser.open(url)
-        return resumen
-    except wikipedia.exceptions.PageError:
-        speak(f"No se encontró una página para '{busqueda}' en Wikipedia.")
-        return "Lo siento, no se encontró información en Wikipedia sobre lo que has pedido."
+
 
 
 
@@ -214,7 +200,6 @@ def init():
             if "abrir" in pedido:
                 app_name = pedido.split("abrir")[-1].strip()
                 speak(f"La aplicación {app_name} se esta abriendo.")
-                continue
                 if open_app(app_name):
                     print("se esta abriendo la aplicacion")
                 else:
@@ -236,8 +221,13 @@ def init():
         elif 'qué hora es' in pedido:
             speak(consultar_hora())
             continue
-        elif 'Busca en Wikipedia' or 'Buscar en Wikipedia' in pedido:
-            buscar_wikipedia(pedido)
+        elif 'busca en wikipedia' in pedido:
+            speak(f'Buscando en wikipedia')
+            pedido = pedido.replace('busca en wikipedia', '')
+            wikipedia.set_lang('es')
+            rta = wikipedia.summary(pedido, sentences=2)
+            speak('Wikipedia dice lo siguiente:')
+            speak(rta)
             continue
         elif 'busca en internet ' in pedido:
             speak('Ya mismo estoy en eso')
@@ -267,7 +257,7 @@ def init():
                 speak("Perdón pero no la he encontrado")
                 continue
 
-        elif 'Chau' in pedido:
+        elif 'Chau' or 'ya no te necesito' in pedido:
             speak('Me voy a descansar, cualquier cosa me avisas')
         break
 
